@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="INTEVA ONE VIEW — Betriebssystem für die HR-Kommunikation">
+  <title>INTEVA ONE VIEW — HR-Kommunikationssystem</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1220;
+      --panel: #111b2d;
+      --panel-raised: #17243a;
+      --line: #263650;
+      --text: #edf3fc;
+      --muted: #9aabc3;
+      --blue: #70a5ff;
+      --blue-soft: #1b355b;
+      --green: #63d6a0;
+      --amber: #f2c66d;
+      --radius: 18px;
+      font-family: "Segoe UI Variable", "Segoe UI", Arial, sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 85% 0%, rgb(37 99 235 / 14%), transparent 34rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+      max-width: 1600px;
+      min-height: 100vh;
+      margin: 0 auto;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      display: flex;
+      height: 100vh;
+      flex-direction: column;
+      padding: 28px 18px;
+      border-right: 1px solid var(--line);
+      background: rgb(11 18 32 / 82%);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 10px 28px;
+      font-size: 15px;
+      font-weight: 750;
+      letter-spacing: .08em;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border: 1px solid #4774b5;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #244b80, #142945);
+      color: #dceaff;
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+
+    .brand-name { color: #8eadd5; }
+
+    .nav-label {
+      padding: 8px 12px;
+      color: #71839d;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 4px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav-list a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+      transition: background-color .18s ease, color .18s ease;
+    }
+
+    .nav-list a:hover,
+    .nav-list a:focus-visible {
+      border-color: var(--line);
+      background: var(--panel);
+      color: var(--text);
+    }
+
+    .nav-icon {
+      width: 18px;
+      color: #82a2ce;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    .sidebar-note {
+      margin-top: auto;
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .sidebar-note strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    main {
+      width: min(100%, 1240px);
+      padding: 30px clamp(20px, 4vw, 56px) 48px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 34px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 9px; }
+    .breadcrumb span:last-child { color: var(--text); }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border: 1px solid #2c5a49;
+      border-radius: 999px;
+      background: #123124;
+      color: #a4ebc7;
+      font-size: 11px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .status::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      content: "";
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(26px, 5vw, 48px);
+      border: 1px solid #2a4264;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 88% 18%, rgb(84 143 230 / 20%), transparent 18rem),
+        linear-gradient(125deg, #172b49, #111b2d 68%);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 13px;
+      color: #a9c8f4;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 20px;
+      height: 1px;
+      background: var(--blue);
+      content: "";
+    }
+
+    h1 {
+      max-width: 700px;
+      margin: 0;
+      font-size: clamp(34px, 5vw, 56px);
+      letter-spacing: -.045em;
+      line-height: 1.08;
+    }
+
+    .hero-copy {
+      max-width: 610px;
+      margin: 18px 0 0;
+      color: #b4c2d7;
+      font-size: 15px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .pill {
+      padding: 6px 10px;
+      border: 1px solid #3a5273;
+      border-radius: 999px;
+      color: #c2d4ed;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .hero-meta .pill:first-child {
+      border-color: #3a664f;
+      background: #123124;
+      color: #a4ebc7;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 38px 0 16px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: -.02em;
+    }
+
+    .section-heading p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .overview-card,
+    .content-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(155deg, rgb(23 36 58 / 92%), rgb(17 27 45 / 96%));
+    }
+
+    .overview-card { padding: 20px; }
+
+    .card-label {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .overview-card strong {
+      display: block;
+      margin-top: 11px;
+      font-size: 18px;
+      font-weight: 650;
+    }
+
+    .overview-card span {
+      display: block;
+      margin-top: 5px;
+      color: #788ca8;
+      font-size: 11px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .content-card {
+      min-width: 0;
+      padding: 22px;
+      scroll-margin-top: 24px;
+    }
+
+    .content-card.wide { grid-column: 1 / -1; }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin: 0 0 14px;
+      font-size: 15px;
+    }
+
+    .card-title .nav-icon {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      border: 1px solid #2d4566;
+      border-radius: 10px;
+      background: var(--blue-soft);
+      color: #a7c7f5;
+    }
+
+    .card-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tag-list li {
+      padding: 6px 9px;
+      border: 1px solid #2b3d58;
+      border-radius: 8px;
+      background: #111e32;
+      color: #c0cee1;
+      font-size: 11px;
+    }
+
+    .architecture-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 17px;
+    }
+
+    .architecture-item {
+      padding: 11px 12px;
+      border: 1px solid #293b56;
+      border-radius: 10px;
+      background: #101a2b;
+      color: #c4d2e6;
+      font-size: 12px;
+    }
+
+    .architecture-item span {
+      display: block;
+      margin-bottom: 3px;
+      color: #7e94b2;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .workflow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin: 17px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .workflow li {
+      padding: 8px 10px;
+      border: 1px solid #2b405e;
+      border-radius: 9px;
+      background: #111e32;
+      color: #c6d5e9;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .workflow li:not(:last-child)::after {
+      padding-left: 9px;
+      color: #6984a8;
+      content: "→";
+    }
+
+    .role-list {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 16px;
+    }
+
+    .role {
+      padding: 12px;
+      border-left: 2px solid #5b8dcc;
+      border-radius: 0 9px 9px 0;
+      background: #13223a;
+      color: #c8d6e9;
+      font-size: 12px;
+    }
+
+    .vision {
+      position: relative;
+      overflow: hidden;
+      border-color: #31517b;
+      background:
+        radial-gradient(ellipse at 100% 100%, rgb(37 99 235 / 18%), transparent 55%),
+        linear-gradient(135deg, #172b49, #111b2d);
+    }
+
+    .vision blockquote {
+      max-width: 780px;
+      margin: 0;
+      color: #dbe8f9;
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.35;
+    }
+
+    .vision blockquote span {
+      display: block;
+      margin-top: 8px;
+      color: #94a9c6;
+      font-size: .68em;
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+
+    footer {
+      padding: 28px 0 0;
+      color: #72839c;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    :focus-visible {
+      outline: 2px solid #8bb6fb;
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        padding: 14px 20px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand { padding: 0 0 12px; }
+      .nav-label, .sidebar-note { display: none; }
+      .nav-list {
+        display: flex;
+        overflow-x: auto;
+        gap: 5px;
+        padding-bottom: 2px;
+      }
+      .nav-list a { padding: 8px 10px; white-space: nowrap; }
+      .nav-icon { display: none; }
+      main { padding-top: 22px; }
+      .topbar { margin-bottom: 22px; }
+    }
+
+    @media (max-width: 640px) {
+      .overview-grid, .content-grid, .architecture-grid { grid-template-columns: 1fr; }
+      .content-card.wide { grid-column: auto; }
+      .overview-card { padding: 16px; }
+      .overview-card strong { margin-top: 7px; }
+      .role-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .section-heading { align-items: start; flex-direction: column; }
+      .workflow { gap: 6px; }
+      .workflow li { padding: 7px 8px; }
+      .workflow li:not(:last-child)::after { padding-left: 6px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview" aria-label="INTEVA ONE VIEW — Startseite">
+        <span class="brand-mark" aria-hidden="true">IOV</span>
+        <span>INTEVA <span class="brand-name">ONE VIEW</span></span>
+      </a>
+      <p class="nav-label">Arbeitsbereich</p>
+      <nav aria-label="Hauptnavigation">
+        <ul class="nav-list">
+          <li><a href="#overview"><span class="nav-icon" aria-hidden="true">⌂</span> Überblick</a></li>
+          <li><a href="#architecture"><span class="nav-icon" aria-hidden="true">◈</span> Architektur</a></li>
+          <li><a href="#navigation"><span class="nav-icon" aria-hidden="true">☷</span> Navigation</a></li>
+          <li><a href="#workflow"><span class="nav-icon" aria-hidden="true">↻</span> Workflow</a></li>
+          <li><a href="#entities"><span class="nav-icon" aria-hidden="true">▦</span> Entitäten</a></li>
+          <li><a href="#boards"><span class="nav-icon" aria-hidden="true">▤</span> Board Twin</a></li>
+          <li><a href="#knowledge"><span class="nav-icon" aria-hidden="true">◇</span> Wissensbibliothek</a></li>
+          <li><a href="#audit"><span class="nav-icon" aria-hidden="true">◷</span> Audit-Zeitmaschine</a></li>
+          <li><a href="#delivery"><span class="nav-icon" aria-hidden="true">⇧</span> API &amp; CI/CD</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-note">
+        <strong>HR-Kommunikationssystem</strong>
+        Überblick über das System zur Steuerung von Kommunikation, Wissen und Audit.
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div class="breadcrumb"><span>Arbeitsbereich</span><span aria-hidden="true">/</span><span>Management-Überblick</span></div>
+        <span class="status">Enterprise-Architektur</span>
+      </div>
+
+      <header class="hero" id="overview">
+        <p class="eyebrow">Betriebssystem für die HR-Kommunikation</p>
+        <h1>INTEVA ONE VIEW</h1>
+        <p class="hero-copy">Eine zentrale Übersicht zur Steuerung der HR-Kommunikation, des Wissens und des gesamten Inhaltslebenszyklus — vom Entwurf bis zur Archivierung.</p>
+        <div class="hero-meta">
+          <span class="pill">Masterdokument · Zielbild</span>
+          <span class="pill">Digitaler Zwilling der Informationstafeln</span>
+          <span class="pill">Nachvollziehbarer Lebenszyklus</span>
+        </div>
+      </header>
+
+      <section aria-labelledby="summary-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="summary-title">Grundprinzipien</h2>
+            <p>Einheitliches Betriebsmodell für die HR-Kommunikation.</p>
+          </div>
+        </div>
+        <div class="overview-grid">
+          <article class="overview-card">
+            <p class="card-label">Führendes Datensystem</p>
+            <strong>SQL Server</strong>
+            <span>System of Record</span>
+          </article>
+          <article class="overview-card">
+            <p class="card-label">Inhalte und Dokumente</p>
+            <strong>SharePoint</strong>
+            <span>Document Management System</span>
+          </article>
+          <article class="overview-card">
+            <p class="card-label">Zugriffsverwaltung</p>
+            <strong>Microsoft Entra ID</strong>
+            <span>Identitätsprüfung und RBAC</span>
+          </article>
+        </div>
+      </section>
+
+      <div class="section-heading">
+        <div>
+          <h2>Betriebsmodell</h2>
+          <p>Zentrale Produktbereiche und ihre Aufgaben.</p>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <section class="content-card wide" id="architecture" aria-labelledby="architecture-title">
+          <h3 class="card-title" id="architecture-title"><span class="nav-icon" aria-hidden="true">◈</span> Plattformarchitektur</h3>
+          <p class="card-copy">Klare Trennung von Datenspeicherung, Dokumenten, Anwendungslogik, Benutzeroberfläche, Reporting und Automatisierung.</p>
+          <div class="architecture-grid">
+            <div class="architecture-item"><span>System of Record</span>SQL Server</div>
+            <div class="architecture-item"><span>Dokumentenverwaltung</span>SharePoint</div>
+            <div class="architecture-item"><span>Business layer</span>ASP.NET Core API</div>
+            <div class="architecture-item"><span>Frontend</span>Power Pages</div>
+            <div class="architecture-item"><span>Reporting</span>Power BI Pro</div>
+            <div class="architecture-item"><span>Automation</span>Power Automate</div>
+          </div>
+        </section>
+
+        <section class="content-card" id="navigation" aria-labelledby="navigation-title">
+          <h3 class="card-title" id="navigation-title"><span class="nav-icon" aria-hidden="true">☷</span> Navigation</h3>
+          <p class="card-copy">Arbeitsbereiche für die täglichen Aufgaben von HR und Inhaltsverantwortlichen.</p>
+          <ul class="tag-list">
+            <li>Heute</li><li>Posteingang</li><li>Aktionscenter</li><li>Aktuelle Tafel</li>
+            <li>Tafelübersicht</li><li>Planer</li><li>Wissensbibliothek</li><li>Audit-Zeitmaschine</li><li>Administration</li>
+          </ul>
+        </section>
+
+        <section class="content-card" id="workflow" aria-labelledby="workflow-title">
+          <h3 class="card-title" id="workflow-title"><span class="nav-icon" aria-hidden="true">↻</span> Inhaltslebenszyklus</h3>
+          <p class="card-copy">Jede Mitteilung durchläuft einen kontrollierten Veröffentlichungs- und Archivierungsprozess.</p>
+          <ol class="workflow" aria-label="Entwurf, Prüfung, Freigegeben, Veröffentlicht, Aktiv, Läuft ab, Archiviert">
+            <li>Entwurf</li><li>Prüfung</li><li>Freigegeben</li><li>Veröffentlicht</li><li>Aktiv</li><li>Läuft ab</li><li>Archiviert</li>
+          </ol>
+        </section>
+
+        <section class="content-card" id="entities" aria-labelledby="entities-title">
+          <h3 class="card-title" id="entities-title"><span class="nav-icon" aria-hidden="true">▦</span> Datenmodell</h3>
+          <p class="card-copy">Die Domänenobjekte bilden Inhalte, Zielorte, Aktionen und den Auditverlauf ab.</p>
+          <ul class="tag-list">
+            <li>Categories</li><li>NoticeStatuses</li><li>Users</li><li>Boards</li><li>Notices</li>
+            <li>Actions</li><li>Campaigns</li><li>AuditTrail</li><li>AuditFieldChanges</li><li>SchemaVersions</li>
+          </ul>
+        </section>
+
+        <section class="content-card" id="boards" aria-labelledby="boards-title">
+          <h3 class="card-title" id="boards-title"><span class="nav-icon" aria-hidden="true">▤</span> Board Twin &amp; Tafelübersicht</h3>
+          <p class="card-copy">Der digitale Zwilling der physischen Informationstafeln zeigt Standorte und veröffentlichte Inhalte übersichtlich an.</p>
+          <ul class="tag-list">
+            <li>HR-Büro</li><li>Montage</li><li>Spritzguss</li><li>Logistik</li><li>Qualität</li><li>Instandhaltung</li>
+          </ul>
+        </section>
+
+        <section class="content-card" id="knowledge" aria-labelledby="knowledge-title">
+          <h3 class="card-title" id="knowledge-title"><span class="nav-icon" aria-hidden="true">◇</span> Wissensbibliothek</h3>
+          <p class="card-copy">Strukturierte Bibliothek mit geprüften Informationen, Vorlagen und Prozessen.</p>
+          <ul class="tag-list">
+            <li>Arbeitssicherheit</li><li>HR</li><li>PSA</li><li>Recht</li><li>Vorlagen</li><li>Prozesse</li>
+          </ul>
+        </section>
+
+        <section class="content-card" id="audit" aria-labelledby="audit-title">
+          <h3 class="card-title" id="audit-title"><span class="nav-icon" aria-hidden="true">◷</span> Audit-Zeitmaschine</h3>
+          <p class="card-copy">Rekonstruktion der Inhalte auf den Informationstafeln zu einem beliebigen Datum mit nachvollziehbarer Änderungshistorie.</p>
+          <ul class="tag-list"><li>AuditTrail</li><li>Änderungshistorie</li><li>Zustandsrekonstruktion</li></ul>
+        </section>
+
+        <section class="content-card" id="delivery" aria-labelledby="delivery-title">
+          <h3 class="card-title" id="delivery-title"><span class="nav-icon" aria-hidden="true">⇧</span> API, SQL &amp; CI/CD</h3>
+          <p class="card-copy">Schnittstellen, Datenbankmigrationen und Bereitstellung mit automatisierten Prüfungen.</p>
+          <ul class="tag-list">
+            <li>Dashboard-API</li><li>Mitteilungen</li><li>Tafeln</li><li>Aktionen</li><li>Audit</li><li>Health-Endpunkte</li>
+            <li>Migrationen 001–020</li><li>Fremdschlüssel</li><li>Indizes</li><li>Views</li><li>Stored Procedures</li><li>Initialdaten</li>
+          </ul>
+          <ol class="workflow" aria-label="Build, Tests, Datenbankmigration, API-Bereitstellung, Pages-Bereitstellung, Rauchtests">
+            <li>Build</li><li>Tests</li><li>DB-Migration</li><li>API-Bereitstellung</li><li>Pages-Bereitstellung</li><li>Rauchtests</li>
+          </ol>
+        </section>
+
+        <section class="content-card wide" aria-labelledby="security-title">
+          <h3 class="card-title" id="security-title"><span class="nav-icon" aria-hidden="true">⌑</span> Rollen und Sicherheit</h3>
+          <p class="card-copy">Berechtigungen richten sich nach der Benutzerrolle und der in Microsoft Entra ID verwalteten Identität.</p>
+          <div class="role-list">
+            <div class="role">Autor</div>
+            <div class="role">Prüfer</div>
+            <div class="role">Veröffentlicher</div>
+            <div class="role">Administrator</div>
+          </div>
+        </section>
+
+        <section class="content-card wide" aria-labelledby="mvp-title">
+          <h3 class="card-title" id="mvp-title"><span class="nav-icon" aria-hidden="true">✦</span> Umfang des MVP</h3>
+          <p class="card-copy">Die erste Version umfasst die zentralen Arbeitsbereiche: Startseite, Posteingang, Board Twin, Tafelübersicht, Planer, Wissensbibliothek und Audit.</p>
+          <ul class="tag-list">
+            <li>Startseite</li><li>Posteingang</li><li>Board Twin</li><li>Tafelübersicht</li><li>Planer</li><li>Wissensbibliothek</li><li>Audit</li>
+          </ul>
+        </section>
+
+        <section class="content-card wide vision" aria-labelledby="vision-title">
+          <h3 class="eyebrow" id="vision-title">Vision</h3>
+          <blockquote>
+            HR sucht nicht nach Dokumenten.
+            <span>Das System steuert Veröffentlichung, Prüfung, Archivierung, Audit und Wissen.</span>
+          </blockquote>
+        </section>
+      </div>
+
+      <footer>INTEVA ONE VIEW <span aria-hidden="true">·</span> Betriebssystem für die HR-Kommunikation</footer>
+    </main>
+  </div>
+</body>
+</html>
